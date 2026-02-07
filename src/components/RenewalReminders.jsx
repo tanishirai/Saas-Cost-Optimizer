@@ -44,17 +44,33 @@ function RenewalReminders() {
   const fetchReminderSettings = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      const { data } = await supabase
+      if (!user) return
+
+      // ✅ FIXED: Removed .single() - now returns array
+      const { data, error } = await supabase
         .from('reminder_settings')
         .select('*')
         .eq('user_id', user.id)
-        .single()
+        // NO .single() here!
 
-      if (data) {
-        setSettings(data)
+      if (error) {
+        console.error('Error fetching settings:', error)
+        return
+      }
+
+      // ✅ Check if array has data
+      if (data && data.length > 0) {
+        const userSettings = data[0] // Get first row
+        setSettings({
+          enabled: userSettings.enabled,
+          days_before: userSettings.days_before,
+          email_enabled: userSettings.email_enabled
+        })
+      } else {
+        console.log('No settings found, using defaults')
       }
     } catch (error) {
-      console.log('Using default reminder settings')
+      console.log('Using default reminder settings:', error)
     }
   }
 
@@ -63,12 +79,21 @@ function RenewalReminders() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       
+      if (!user) {
+        alert('⚠️ Please log in to save settings')
+        return
+      }
+
       const { error } = await supabase
         .from('reminder_settings')
         .upsert({
           user_id: user.id,
-          ...settings,
+          enabled: settings.enabled,
+          days_before: settings.days_before,
+          email_enabled: settings.email_enabled,
           updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
         })
 
       if (error) throw error

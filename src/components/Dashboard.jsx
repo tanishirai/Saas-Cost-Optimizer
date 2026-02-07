@@ -196,6 +196,7 @@ function Dashboard() {
           justifyContent: "center",
           minHeight: "100vh",
           gap: "16px",
+          padding: "20px",
         }}
       >
         <div className="spinner"></div>
@@ -209,15 +210,21 @@ function Dashboard() {
   }
 
   return (
-    <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-      {/* Header */}
+    <div
+      style={{
+        maxWidth: "1400px",
+        margin: "0 auto",
+        padding: "clamp(12px, 3vw, 24px)",
+      }}
+    >
+      {/* Header - RESPONSIVE WITH BUTTONS ON RIGHT */}
       <div
         style={{
           background: "var(--card-background)",
           backdropFilter: "blur(20px)",
           borderRadius: "16px",
-          padding: "28px",
-          marginBottom: "28px",
+          padding: "clamp(16px, 4vw, 28px)",
+          marginBottom: "clamp(16px, 3vw, 28px)",
           border: "2px solid var(--color-border)",
         }}
       >
@@ -226,18 +233,20 @@ function Dashboard() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            flexWrap: "wrap",
+            flexWrap: "wrap", // ✅ Allows wrapping on mobile
             gap: "16px",
           }}
         >
-          <div>
+          {/* Left Side - Greeting */}
+          <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
             <h1
               style={{
                 color: "var(--color-text)",
-                fontSize: "32px",
+                fontSize: "clamp(20px, 6vw, 32px)",
                 fontWeight: "800",
                 letterSpacing: "-0.5px",
                 marginBottom: "8px",
+                lineHeight: "1.2",
               }}
             >
               Hello, {profile?.name || user?.email?.split("@")[0] || "there"}!
@@ -246,7 +255,7 @@ function Dashboard() {
             <p
               style={{
                 color: "var(--color-text-muted)",
-                fontSize: "16px",
+                fontSize: "clamp(12px, 3vw, 16px)",
                 fontWeight: 500,
               }}
             >
@@ -259,7 +268,15 @@ function Dashboard() {
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          {/* Right Side - Buttons */}
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              flexWrap: "wrap",
+              justifyContent: "flex-end", // ✅ Align right on desktop
+            }}
+          >
             {profile?.subscription_tier === "free" && (
               <button
                 onClick={() => setShowPremium(true)}
@@ -271,10 +288,13 @@ function Dashboard() {
                   background:
                     "linear-gradient(135deg, var(--color-muted) 0%, var(--color-danger) 100%)",
                   border: "none",
+                  fontSize: "clamp(12px, 3vw, 14px)",
+                  padding: "10px 16px",
+                  whiteSpace: "nowrap",
                 }}
               >
-                <Crown size={20} />
-                Upgrade to Premium
+                <Crown size={18} />
+                <span>Upgrade to Premium</span>
               </button>
             )}
 
@@ -284,23 +304,32 @@ function Dashboard() {
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
-                  padding: "10px 20px",
+                  padding: "10px 16px",
                   background:
                     "linear-gradient(135deg, #FF7700 0%, #FFC800 100%)",
                   borderRadius: "12px",
                   color: "white",
                   fontWeight: 700,
-                  fontSize: "14px",
+                  fontSize: "clamp(12px, 3vw, 14px)",
+                  whiteSpace: "nowrap",
                 }}
               >
-                <Crown size={20} />
+                <Crown size={18} />
                 Premium Member
               </div>
             )}
 
-            <button onClick={handleLogout} className="btn btn-danger">
+            <button
+              onClick={handleLogout}
+              className="btn btn-danger"
+              style={{
+                fontSize: "clamp(12px, 3vw, 14px)",
+                padding: "10px 16px",
+                whiteSpace: "nowrap",
+              }}
+            >
               <LogOut size={16} />
-              Sign Out
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
@@ -312,8 +341,16 @@ function Dashboard() {
       {/* Overview Tab */}
       {activeTab === "overview" && (
         <>
-          {/* Stats Grid */}
-          <div className="grid grid-3" style={{ marginBottom: "28px" }}>
+          {/* Stats Grid - RESPONSIVE */}
+          <div
+            className="grid grid-3"
+            style={{
+              marginBottom: "clamp(16px, 3vw, 28px)",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "clamp(12px, 2vw, 20px)",
+            }}
+          >
             <div className="stat-card">
               <div
                 style={{ display: "flex", alignItems: "center", gap: "14px" }}
@@ -321,16 +358,17 @@ function Dashboard() {
                 <div
                   style={{
                     background: "rgba(239, 214, 172, 0.15)",
-                    padding: "14px",
+                    padding: "12px",
                     borderRadius: "12px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexShrink: 0,
                   }}
                 >
-                  <DollarSign size={28} strokeWidth={2} />
+                  <DollarSign size={24} strokeWidth={2} />
                 </div>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div className="stat-label">Monthly Cost</div>
                   <div className="stat-value">₹{totalMonthly.toFixed(0)}</div>
                 </div>
@@ -344,16 +382,17 @@ function Dashboard() {
                 <div
                   style={{
                     background: "rgba(239, 214, 172, 0.15)",
-                    padding: "14px",
+                    padding: "12px",
                     borderRadius: "12px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexShrink: 0,
                   }}
                 >
-                  <TrendingUp size={28} strokeWidth={2} />
+                  <TrendingUp size={24} strokeWidth={2} />
                 </div>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div className="stat-label">Annual Projection</div>
                   <div className="stat-value">₹{totalYearly.toFixed(0)}</div>
                 </div>
@@ -375,20 +414,21 @@ function Dashboard() {
                 <div
                   style={{
                     background: "rgba(239, 214, 172, 0.15)",
-                    padding: "14px",
+                    padding: "12px",
                     borderRadius: "12px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexShrink: 0,
                   }}
                 >
                   {unusedSubs > 0 ? (
-                    <AlertCircle size={28} strokeWidth={2} />
+                    <AlertCircle size={24} strokeWidth={2} />
                   ) : (
-                    <Activity size={28} strokeWidth={2} />
+                    <Activity size={24} strokeWidth={2} />
                   )}
                 </div>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div className="stat-label">
                     {unusedSubs > 0 ? "Potential Savings" : "Status"}
                   </div>
@@ -401,11 +441,9 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <AdvancedInsights subscriptions={subscriptions} />
-          {/* Insights Panel */}
-          <InsightsPanel subscriptions={subscriptions} />
 
-          {/* Analytics Section */}
+          <AdvancedInsights subscriptions={subscriptions} />
+          <InsightsPanel subscriptions={subscriptions} />
           <Analytics subscriptions={filteredSubscriptions} />
           <RenewalCalendar subscriptions={subscriptions} />
         </>
@@ -415,15 +453,15 @@ function Dashboard() {
       {activeTab === "subscriptions" && (
         <>
           {/* Add Button */}
-          <div style={{ marginBottom: "28px" }}>
+          <div style={{ marginBottom: "clamp(16px, 3vw, 28px)" }}>
             <button
               onClick={() => setShowAddModal(true)}
               className="btn btn-success"
               style={{
                 width: "100%",
                 justifyContent: "center",
-                fontSize: "15px",
-                padding: "16px",
+                fontSize: "clamp(13px, 3vw, 15px)",
+                padding: "clamp(12px, 3vw, 16px)",
                 fontWeight: 700,
               }}
             >
@@ -438,19 +476,20 @@ function Dashboard() {
               background: "var(--card-background)",
               backdropFilter: "blur(20px)",
               borderRadius: "16px",
-              padding: "28px",
+              padding: "clamp(16px, 4vw, 28px)",
               border: "1px solid var(--color-border)",
             }}
           >
             <h2
               style={{
                 color: "var(--color-text)",
-                fontSize: "20px",
+                fontSize: "clamp(16px, 4vw, 20px)",
                 fontWeight: 700,
                 marginBottom: "20px",
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
+                flexWrap: "wrap",
               }}
             >
               Your Subscriptions
@@ -459,7 +498,7 @@ function Dashboard() {
                   background: "var(--card-background)",
                   padding: "3px 10px",
                   borderRadius: "10px",
-                  fontSize: "13px",
+                  fontSize: "clamp(11px, 2.5vw, 13px)",
                   fontWeight: 600,
                   border: "1px solid var(--color-border)",
                 }}
@@ -492,22 +531,22 @@ function Dashboard() {
       {/* Reports Tab */}
       {activeTab === "reports" && (
         <>
-           <ReportsSection subscriptions={subscriptions} profile={profile} />
+          <ReportsSection subscriptions={subscriptions} profile={profile} />
           {/* Export Section */}
           <div
             style={{
               background: "var(--card-background)",
               backdropFilter: "blur(20px)",
               borderRadius: "16px",
-              padding: "28px",
-              marginBottom: "28px",
+              padding: "clamp(16px, 4vw, 28px)",
+              marginBottom: "clamp(16px, 3vw, 28px)",
               border: "1px solid var(--color-border)",
             }}
           >
             <h3
               style={{
                 color: "var(--color-text)",
-                fontSize: "20px",
+                fontSize: "clamp(16px, 4vw, 20px)",
                 fontWeight: 700,
                 marginBottom: "12px",
                 display: "flex",
@@ -515,20 +554,26 @@ function Dashboard() {
                 gap: "10px",
               }}
             >
-              <Download size={24} />
+              <Download size={20} />
               Export Reports
             </h3>
             <p
               style={{
                 color: "var(--color-text-muted)",
                 marginBottom: "20px",
-                fontSize: "14px",
+                fontSize: "clamp(12px, 3vw, 14px)",
               }}
             >
               Download your subscription data in various formats
             </p>
 
-            <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+              }}
+            >
               <button
                 onClick={handleExportSubscriptions}
                 className="btn btn-secondary"
@@ -536,7 +581,12 @@ function Dashboard() {
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
+                  fontSize: "clamp(12px, 3vw, 14px)",
+                  padding: "12px 16px",
+                  flex: "1 1 auto",
+                  minWidth: "200px",
                 }}
               >
                 📥 Export Subscriptions (CSV)
@@ -549,9 +599,14 @@ function Dashboard() {
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
+                  fontSize: "clamp(12px, 3vw, 14px)",
+                  padding: "12px 16px",
                   opacity: profile?.subscription_tier !== "premium" ? 0.6 : 1,
                   position: "relative",
+                  flex: "1 1 auto",
+                  minWidth: "200px",
                 }}
               >
                 📄 Generate PDF Report
@@ -559,7 +614,7 @@ function Dashboard() {
                   <span
                     style={{
                       marginLeft: "4px",
-                      fontSize: "11px",
+                      fontSize: "10px",
                       backgroundColor: "#ff6b35",
                       padding: "2px 6px",
                       borderRadius: "4px",

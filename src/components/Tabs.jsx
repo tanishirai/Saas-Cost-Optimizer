@@ -10,14 +10,15 @@ function Tabs({ activeTab, setActiveTab }) {
 
   return (
     <div style={{
-      display: 'flex',
-      gap: '12px',
-      marginBottom: '32px',
-      padding: '8px',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)', // ✅ Equal width columns
+      gap: 'clamp(6px, 2vw, 12px)',
+      marginBottom: 'clamp(16px, 3vw, 32px)',
+      padding: 'clamp(6px, 2vw, 8px)',
       background: 'var(--card-background)',
-      borderRadius: '16px',
+      borderRadius: 'clamp(12px, 3vw, 16px)',
       border: '1px solid var(--color-border)',
-      backdropFilter: 'blur(20px)'
+      backdropFilter: 'blur(20px)',
     }}>
       {tabs.map((tab) => {
         const Icon = tab.icon
@@ -28,22 +29,24 @@ function Tabs({ activeTab, setActiveTab }) {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             style={{
-              flex: 1,
-              padding: '14px 20px',
+              padding: 'clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 20px)',
               background: isActive 
                 ? 'linear-gradient(135deg, var(--color-muted) 0%, var(--color-danger) 100%)'
                 : 'transparent',
               border: 'none',
-              borderRadius: '12px',
-              color: isActive ? '#0f0f0f' : 'var(--color-text-muted)',
+              borderRadius: 'clamp(8px, 2vw, 12px)',
+              color: isActive ? '#EFD6AC' : 'var(--color-text-muted)',
               fontWeight: isActive ? 700 : 500,
-              fontSize: '15px',
+              fontSize: 'clamp(0px, 3vw, 15px)', // ✅ Scales from 0 (mobile) to 15px (desktop)
               cursor: 'pointer',
               transition: 'all 0.3s',
               display: 'flex',
+              flexDirection: 'column', // ✅ Stack icon and text
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px'
+              gap: 'clamp(2px, 1vw, 8px)',
+              whiteSpace: 'nowrap',
+              minHeight: '44px', // ✅ Touch-friendly minimum
             }}
             onMouseEnter={(e) => {
               if (!isActive) {
@@ -56,8 +59,13 @@ function Tabs({ activeTab, setActiveTab }) {
               }
             }}
           >
-            <Icon size={20} />
-            {tab.label}
+            <Icon size={window.innerWidth < 768 ? 18 : 20} />
+            <span style={{ 
+              fontSize: 'clamp(0px, 3vw, 15px)',
+              lineHeight: 1,
+            }}>
+              {tab.label}
+            </span>
           </button>
         )
       })}

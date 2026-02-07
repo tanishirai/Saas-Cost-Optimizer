@@ -48,7 +48,7 @@ function Analytics({ subscriptions }) {
         const monthDate = new Date(
           now.getFullYear(),
           now.getMonth() - (2 - index),
-          1
+          1,
         );
 
         if (createdAt <= monthDate) {
@@ -76,7 +76,7 @@ function Analytics({ subscriptions }) {
   };
 
   const COLORS = categoryData.map(
-    (entry) => CATEGORY_COLORS[entry.name] || CATEGORY_COLORS["Other"]
+    (entry) => CATEGORY_COLORS[entry.name] || CATEGORY_COLORS["Other"],
   );
 
   const total = categoryData.reduce((sum, item) => sum + item.value, 0);
@@ -184,7 +184,7 @@ function Analytics({ subscriptions }) {
             flexWrap: "wrap",
           }}
         >
-          {/* Donut Chart - ✅ FIXED WITH ASPECT */}
+          {/* Donut Chart */}
           <div style={{ width: "200px", flexShrink: 0 }}>
             <ResponsiveContainer width="100%" aspect={1}>
               <PieChart>
@@ -282,7 +282,7 @@ function Analytics({ subscriptions }) {
         </div>
       </div>
 
-      {/* Monthly Spending Trend - ✅ FIXED WITH ASPECT */}
+      {/* Monthly Spending Trend */}
       <div className="card">
         <h3
           style={{
@@ -294,8 +294,10 @@ function Analytics({ subscriptions }) {
         >
           Monthly Spending Trend
         </h3>
-        <div style={{ width: "100%" }}>
-          <ResponsiveContainer width="100%" aspect={2}>
+        <div style={{ width: "100%", height: "320px" }}>
+          {" "}
+          {/* ✅ Increased to 320px */}
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={monthlyTrend}>
               <defs>
                 <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
